@@ -1,0 +1,7 @@
+/target
+/.idea/
+/migrations/
+
+diesel.toml
+Cargo.lock
+.env

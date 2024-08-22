@@ -1,0 +1,16 @@
+[package]
+name = "freeleirix"
+version = "0.0.1"
+edition = "2021"
+
+[dependencies]
+actix-web = "4.9.0"
+chrono = { version = "0.4.38", features = ["serde"] }
+diesel = {version = "2.2.2", features = ["postgres", "r2d2", "chrono"]}
+dotenvy = "0.15.7"
+log = "0.4.22"
+serde = { version = "1.0.208", features = ["derive"] }
+
+[[bin]]
+path = "src/main.rs"
+name = "freeleirix"
