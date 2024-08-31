@@ -1,5 +1,6 @@
 use actix_web::{web, HttpResponse, Responder};
 use crate::models::users::{Users, CreateUser, UpdateUser};
+use crate::config::auth::Login;
 use crate::DbPool;
 
 pub async fn list_users(pool: web::Data<DbPool>) -> impl Responder {
@@ -11,12 +12,21 @@ pub async fn list_users(pool: web::Data<DbPool>) -> impl Responder {
     }
 }
 
+pub async fn login(pool: web::Data<DbPool>, login_data: web::Json<Login>) -> impl Responder {
+    let result = Users::login(&pool, login_data.into_inner());
+
+    match result {
+        Ok(token) => HttpResponse::Ok().json(token),
+        Err(_) => HttpResponse::BadRequest().json("Invalid email or password")
+    }
+}
+
 pub async fn create_user(pool: web::Data<DbPool>, new_user: web::Json<CreateUser>) -> impl Responder {
     let new_user = new_user.into_inner();
     let result = Users::create_user(&pool, new_user);
 
     match result {
-        Ok(user) => HttpResponse::Ok().json(user),
+        Ok(user) => HttpResponse::Created().json(user),
         Err(_) => HttpResponse::InternalServerError().finish(),
     }
 }
@@ -50,5 +60,9 @@ pub fn init_routes(cfg: &mut web::ServiceConfig) {
         web::resource("/users/{id}")
             .route(web::put().to(update_user))
             .route(web::delete().to(delete_user))
+    )
+    .service(
+        web::resource("/login")
+            .route(web::post().to(login))
     );
 }

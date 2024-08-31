@@ -23,10 +23,12 @@ diesel::table! {
         #[max_length = 255]
         email -> Varchar,
         description -> Nullable<Text>,
-        contractor -> Bool,
-        freelancer -> Bool,
-        #[max_length = 50]
-        doc -> Varchar,
+        contractor -> Nullable<Bool>,
+        freelancer -> Nullable<Bool>,
+        #[max_length = 255]
+        doc -> Nullable<Varchar>,
+        #[max_length = 255]
+        password -> Varchar,
         created_at -> Nullable<Timestamp>,
         updated_at -> Nullable<Timestamp>,
         removed -> Nullable<Bool>,

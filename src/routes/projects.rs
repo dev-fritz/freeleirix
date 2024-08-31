@@ -19,7 +19,7 @@ pub async fn create_project(
     let result = Projects::create_project(&pool, new_project);
 
     match result {
-        Ok(project) => HttpResponse::Ok().json(project),
+        Ok(project) => HttpResponse::Created().json(project),
         Err(_) => HttpResponse::InternalServerError().finish(),
     }
 }
@@ -42,7 +42,7 @@ pub async fn delete_project(pool: web::Data<DbPool>, project_id: web::Path<i32>)
     let result = Projects::delete_project(&pool, project_id.into_inner());
 
     match result {
-        Ok(_) => HttpResponse::Ok().finish(),
+        Ok(_) => HttpResponse::NoContent().finish(),
         Err(_) => HttpResponse::InternalServerError().finish(),
     }
 }
